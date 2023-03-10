@@ -62,9 +62,9 @@ include_once '../template/topbar.php';
                             </div>
 
                             <div class="item form-group">
-                                <label for="tlp" class="col-form-label col-md-3 col-sm-3 label-align"> Telepon </label>
+                                <label for="telepon" class="col-form-label col-md-3 col-sm-3 label-align"> Telepon </label>
                                 <div class="col-md-6 col-sm-6 ">
-                                    <input id="tlp" required="required" class="form-control" type="text" name="tlp">
+                                    <input id="telepon" required="required" class="form-control" type="number" name="telepon">
                                 </div>
                             </div>
 
