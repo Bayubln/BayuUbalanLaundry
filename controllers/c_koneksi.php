@@ -4,7 +4,7 @@ class c_koneksi{
 
     function koneksi(){
 
-        $conn = mysqli_connect('localhost','root','','laundry');
+        $conn = mysqli_connect('localhost','root','','bayu_laundry');
 
         // return $conn;
 
