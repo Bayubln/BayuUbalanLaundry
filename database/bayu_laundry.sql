@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 27 Feb 2023 pada 02.10
+-- Waktu pembuatan: 11 Mar 2023 pada 03.14
 -- Versi server: 10.3.16-MariaDB
 -- Versi PHP: 7.3.7
 
@@ -19,22 +19,8 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `laundry`
+-- Database: `bayu_laundry`
 --
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `tb_detail_transaksi`
---
-
-CREATE TABLE `tb_detail_transaksi` (
-  `id` int(11) NOT NULL,
-  `id_transaksi` int(11) NOT NULL,
-  `id_paket` int(11) NOT NULL,
-  `qty` double NOT NULL,
-  `keterangan` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -55,8 +41,7 @@ CREATE TABLE `tb_member` (
 --
 
 INSERT INTO `tb_member` (`id`, `nama`, `alamat`, `jenis_kelamin`, `tlp`) VALUES
-(1, 'ajul', 'gbr3', 'L', ''),
-(2, 'ajul', 'gbr3', 'L', '');
+(1, 'amir', 'Cisarua', 'L', '089675987098');
 
 -- --------------------------------------------------------
 
@@ -76,7 +61,8 @@ CREATE TABLE `tb_outlet` (
 --
 
 INSERT INTO `tb_outlet` (`id`, `nama`, `alamat`, `tlp`) VALUES
-(11, 'Laundry Ajul', 'Cilame', '085678957');
+(1, 'Outlet A', 'Cisarua', '089787657897'),
+(2, 'Outlet B', 'Paku Haji', '089687543123');
 
 -- --------------------------------------------------------
 
@@ -87,7 +73,7 @@ INSERT INTO `tb_outlet` (`id`, `nama`, `alamat`, `tlp`) VALUES
 CREATE TABLE `tb_paket` (
   `id` int(11) NOT NULL,
   `id_outlet` int(11) NOT NULL,
-  `jenis` enum('kilon','selimut','bed_cover','kaos','lain') DEFAULT NULL,
+  `jenis` enum('kiloan','selimut','bed_cover','kaos','lain') DEFAULT NULL,
   `nama_paket` varchar(100) NOT NULL,
   `harga` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -97,8 +83,7 @@ CREATE TABLE `tb_paket` (
 --
 
 INSERT INTO `tb_paket` (`id`, `id_outlet`, `jenis`, `nama_paket`, `harga`) VALUES
-(6, 11, '', 'selimut', 30000),
-(7, 11, '', 'baju', 4000);
+(3, 2, 'kiloan', 'kiloan', 12000);
 
 -- --------------------------------------------------------
 
@@ -125,6 +110,14 @@ CREATE TABLE `tb_transaksi` (
   `keterangan` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data untuk tabel `tb_transaksi`
+--
+
+INSERT INTO `tb_transaksi` (`id`, `id_outlet`, `kode_invoice`, `id_member`, `tgl`, `batas_waktu`, `tanggal_bayar`, `biaya_tambahan`, `diskon`, `pajak`, `status`, `dibayar`, `id_user`, `id_paket`, `qty`, `keterangan`) VALUES
+(18, 1, 'L001', 1, '2023-03-10', '2023-03-03', '2023-03-04', 0, 0, 0, 'baru', 'dibayar', 8, 3, 44, 'bersih'),
+(19, 1, 'L002', 1, '2023-03-11', '2023-03-12', '0000-00-00', 0, 0, 0, 'baru', 'belum_dibayar', 8, 3, 1, 'bersih');
+
 -- --------------------------------------------------------
 
 --
@@ -145,22 +138,11 @@ CREATE TABLE `tb_user` (
 --
 
 INSERT INTO `tb_user` (`id`, `nama`, `username`, `password`, `id_outlet`, `role`) VALUES
-(18, 'AjulBejul', 'AjulBejul', '$2y$10$hNqCTrKH/rH.6cr1hLDu9.3UyDilZTMlMi9EJ8qPI9jCcx/.vMnh2', 11, 'admin'),
-(19, 'BayBenjiro', 'BayBenjiro', '$2y$10$2wH2vjemzo2WwmMKjyHqK.teMv4MwHPjAchKO7gBgNIEUXW4kr7e2', 11, 'kasir'),
-(20, 'azril', 'azril', '$2y$10$hXINdJCGxyxkuL8K7Q.G6eoV/a/jQVFTGkbPqr.nIu3KptPZpoYJ6', 11, 'owner');
+(8, 'BayBenjiro', 'BayBenjiro', '$2y$10$IFoVOnlDh221f9HHCRXY7ePESVN4pHE/bVnUjLwd./5xjUzGuCsLS', 1, 'admin');
 
 --
 -- Indexes for dumped tables
 --
-
---
--- Indeks untuk tabel `tb_detail_transaksi`
---
-ALTER TABLE `tb_detail_transaksi`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id` (`id`),
-  ADD KEY `id_transaksi` (`id_transaksi`),
-  ADD KEY `id_paket` (`id_paket`);
 
 --
 -- Indeks untuk tabel `tb_member`
@@ -189,7 +171,8 @@ ALTER TABLE `tb_transaksi`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_member` (`id_member`),
   ADD KEY `id_user` (`id_user`),
-  ADD KEY `id_outlet` (`id_outlet`);
+  ADD KEY `id_outlet` (`id_outlet`),
+  ADD KEY `id_paket` (`id_paket`);
 
 --
 -- Indeks untuk tabel `tb_user`
@@ -203,51 +186,38 @@ ALTER TABLE `tb_user`
 --
 
 --
--- AUTO_INCREMENT untuk tabel `tb_detail_transaksi`
---
-ALTER TABLE `tb_detail_transaksi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT untuk tabel `tb_member`
 --
 ALTER TABLE `tb_member`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_outlet`
 --
 ALTER TABLE `tb_outlet`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_paket`
 --
 ALTER TABLE `tb_paket`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_transaksi`
 --
 ALTER TABLE `tb_transaksi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_user`
 --
 ALTER TABLE `tb_user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
 --
-
---
--- Ketidakleluasaan untuk tabel `tb_detail_transaksi`
---
-ALTER TABLE `tb_detail_transaksi`
-  ADD CONSTRAINT `tb_detail_transaksi_ibfk_1` FOREIGN KEY (`id_transaksi`) REFERENCES `tb_transaksi` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `tb_detail_transaksi_ibfk_2` FOREIGN KEY (`id_paket`) REFERENCES `tb_paket` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ketidakleluasaan untuk tabel `tb_paket`
@@ -261,7 +231,8 @@ ALTER TABLE `tb_paket`
 ALTER TABLE `tb_transaksi`
   ADD CONSTRAINT `tb_transaksi_ibfk_1` FOREIGN KEY (`id_member`) REFERENCES `tb_member` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `tb_transaksi_ibfk_2` FOREIGN KEY (`id_user`) REFERENCES `tb_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `tb_transaksi_ibfk_3` FOREIGN KEY (`id_outlet`) REFERENCES `tb_outlet` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `tb_transaksi_ibfk_3` FOREIGN KEY (`id_outlet`) REFERENCES `tb_outlet` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `tb_transaksi_ibfk_4` FOREIGN KEY (`id_paket`) REFERENCES `tb_paket` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ketidakleluasaan untuk tabel `tb_user`
